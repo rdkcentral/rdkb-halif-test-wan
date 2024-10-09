@@ -1,0 +1,21 @@
+wan:
+  config:
+    queue:
+      queueKey:
+      queuePrecedence:
+      dropAlgorithm: ""
+      schedulerAlgorithm: ""
+      shapingRate: 
+      shapingBurstSize: 
+      MinBitRate: 
+      DslLatency: 
+      PtmPriority: 
+      QueueId: 
+    psidOffset: 
+    ratio: 
+    inavlid_wanmode:
+      - 
+      - 
+      - 
+      - 
+
