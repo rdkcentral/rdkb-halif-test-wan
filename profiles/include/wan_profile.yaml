@@ -1,21 +1,35 @@
+# Temporary  Configuration File defined for testing purposes only.
+# All the values stated are example or reference values which are vendor-specific.
 wan:
   config:
     queue:
-      queueKey:
-      queuePrecedence:
-      dropAlgorithm: ""
-      schedulerAlgorithm: ""
-      shapingRate: 
-      shapingBurstSize: 
-      MinBitRate: 
-      DslLatency: 
-      PtmPriority: 
-      QueueId: 
-    psidOffset: 
-    ratio: 
-    inavlid_wanmode:
-      - 
-      - 
-      - 
-      - 
-
+      InstanceNumber: 127
+      Alias: "Queue_1"
+      queueKey: 0
+      queueEnable: true
+      queueStatus: "Enabled"
+      queueInterface: "erouter0"
+      queueWeight: 50
+      queuePrecedence: 10
+      REDThreshold: 75
+      dropAlgorithm: "RED"
+      schedulerAlgorithm: "WFQ"
+      shapingRate: 1000000
+      shapingBurstSize: 1000
+      MinBitRate: 512000
+      QueueName: "WAN Q1"
+      DslLatency: 0
+      PtmPriority: 1
+      QueueId: 1
+      LowClassMaxThreshold: 90
+      LowClassMinThreshold: 10
+      HighClassMinThreshold: 20
+      HighClassMaxThreshold: 80
+      L2DeviceType: "eth"
+    psidOffset: 0
+    ratio: 1
+    invalid_wanmode:
+      - 0
+      - 5
+      - -1
+      - 100

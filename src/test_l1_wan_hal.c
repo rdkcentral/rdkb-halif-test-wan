@@ -57,6 +57,54 @@ WAN_QOS_QUEUE queue;
  * | :----: | --------- | ---------- |-------------- | ----- |
  * | 01 | Invoke the WAN HAL initialization function | No input data required for this function | The return value should be RETURN_OK, indicating successful initialization | Should be successful |
  */
+int fetch_queue_data()
+{
+    char retrievedString[MAX_STRING_LENGTH];
+    queue.InstanceNumber = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.InstanceNumber");
+
+    UT_KVP_PROFILE_GET_STRING("wan.config.queue.Alias", retrievedString);
+    strncpy(queue.Alias, retrievedString, sizeof(queue.Alias));
+
+    queue.queueKey = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.queueKey");
+    queue.queueEnable = UT_KVP_PROFILE_GET_BOOL("wan.config.queue.queueEnable");
+
+    UT_KVP_PROFILE_GET_STRING("wan.config.queue.queueStatus", retrievedString);
+    strncpy(queue.queueStatus, retrievedString, sizeof(queue.queueStatus));
+
+    UT_KVP_PROFILE_GET_STRING("wan.config.queue.queueInterface", retrievedString);
+    strncpy(queue.queueInterface, retrievedString, sizeof(queue.queueInterface));
+
+    queue.queueWeight = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.queueWeight");
+    queue.queuePrecedence = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.queuePrecedence");
+    queue.REDThreshold = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.REDThreshold");
+
+    UT_KVP_PROFILE_GET_STRING("wan.config.queue.dropAlgorithm", retrievedString);
+    strncpy(queue.dropAlgorithm, retrievedString, sizeof(queue.dropAlgorithm));
+
+    UT_KVP_PROFILE_GET_STRING("wan.config.queue.schedulerAlgorithm", retrievedString);
+    strncpy(queue.schedulerAlgorithm, retrievedString, sizeof(queue.schedulerAlgorithm));
+
+    queue.shapingRate = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.shapingRate");
+    queue.shapingBurstSize = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.shapingBurstSize");
+    queue.MinBitRate = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.MinBitRate");
+
+    UT_KVP_PROFILE_GET_STRING("wan.config.queue.QueueName", retrievedString);
+    strncpy(queue.QueueName, retrievedString, sizeof(queue.QueueName));
+
+    queue.DslLatency = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.DslLatency");
+    queue.PtmPriority = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.PtmPriority");
+    queue.QueueId = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.QueueId");
+
+    queue.LowClassMaxThreshold = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.LowClassMaxThreshold");
+    queue.LowClassMinThreshold = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.LowClassMinThreshold");
+    queue.HighClassMinThreshold = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.HighClassMinThreshold");
+    queue.HighClassMaxThreshold = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.HighClassMaxThreshold");
+
+    UT_KVP_PROFILE_GET_STRING("wan.config.queue.L2DeviceType", retrievedString);
+    strncpy(queue.L2DeviceType, retrievedString, sizeof(queue.L2DeviceType));
+
+    return 0;
+}
 
 void test_l1_wan_hal_positive1_Init(void)
 {
@@ -704,8 +752,6 @@ void test_l1_wan_hal_negative3_SetQoSConfiguration(void)
     gTestID = 21;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    WAN_QOS_QUEUE queue;
-    // Initialize queue with valid values
     int status = wan_hal_SetQoSConfiguration(&queue, 1, NULL, "erouter0");
 
     UT_LOG_DEBUG("Invoking wan_hal_SetQoSConfiguration with valid pQueue, QueueNumberOfEntries = 1, baseifname = NULL and valid wanifname\n");
@@ -738,7 +784,6 @@ void test_l1_wan_hal_negative4_SetQoSConfiguration(void)
     gTestID = 22;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    WAN_QOS_QUEUE queue;
     int status = wan_hal_SetQoSConfiguration(&queue, 1, "erouter0", NULL);
 
     UT_LOG_DEBUG("Invoking wan_hal_SetQoSConfiguration with valid pQueue, QueueNumberOfEntries = 1, valid baseifname and wanifname = NULL\n");
@@ -1864,7 +1909,7 @@ void test_l1_wan_hal_negative2_EnableMapt(void)
  * In this test, the function wan_hal_EnableMapt is invoked with an invalid brIPv6Prefix to ensure that the function handles error conditions correctly.@n
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 057@n
+ * **Test Case ID:** 056@n
  * **Priority:** High@n
  * @n
  * **Pre-Conditions:** None@n
@@ -1879,7 +1924,7 @@ void test_l1_wan_hal_negative2_EnableMapt(void)
 
 void test_l1_wan_hal_negative3_EnableMapt(void)
 {
-    gTestID = 57;
+    gTestID = 56;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     unsigned int ratio;
@@ -1902,7 +1947,7 @@ void test_l1_wan_hal_negative3_EnableMapt(void)
  * In this test, the wan_hal_EnableMapt function is invoked with an invalid ruleIPv4Prefix to ensure that the function handles the error correctly.@n
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 058@n
+ * **Test Case ID:** 057@n
  * **Priority:** High@n
  * @n
  * **Pre-Conditions:** None@n
@@ -1917,7 +1962,7 @@ void test_l1_wan_hal_negative3_EnableMapt(void)
 
 void test_l1_wan_hal_negative4_EnableMapt(void)
 {
-    gTestID = 58;
+    gTestID = 57;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     unsigned int ratio;
     unsigned int psidOffset;
@@ -1939,7 +1984,7 @@ void test_l1_wan_hal_negative4_EnableMapt(void)
  * In this test, the function wan_hal_EnableMapt is invoked with an invalid ruleIPv6Prefix to ensure that the function handles error conditions correctly.@n
  *
  * **Test Group ID:** Basic: 01@n
- * **Test Case ID:** 059@n
+ * **Test Case ID:** 058@n
  * **Priority:** High@n
  * @n
  * **Pre-Conditions:** None@n
@@ -1954,7 +1999,7 @@ void test_l1_wan_hal_negative4_EnableMapt(void)
 
 void test_l1_wan_hal_negative5_EnableMapt(void)
 {
-    gTestID = 59;
+    gTestID = 58;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     unsigned int ratio;
@@ -2476,50 +2521,11 @@ static UT_test_suite_t *pSuite = NULL;
 int test_wan_hal_l1_register(void)
 {
     // Create the test suite
-    pSuite = UT_add_suite("[L1 wan_hal]", NULL, NULL);
+    pSuite = UT_add_suite("[L1 wan_hal]", fetch_queue_data, NULL);
     if (pSuite == NULL)
     {
         return -1;
     }
-
-    // Initialize the queue structure with valid values
-    queue.InstanceNumber = 1;                                                              // Instance number (1 to 128)
-    strncpy(queue.Alias, "Queue_1", sizeof(queue.Alias));                                  // Alias (Queue_1, Queue_2, ...)
-    queue.queueKey = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.queueKey");               // Queue key (vendor-specific)
-    queue.queueEnable = 1;                                                                 // TRUE (Enabled)
-    strncpy(queue.queueStatus, "Enabled", sizeof(queue.queueStatus));                      // Queue status (Enabled/Disabled)
-    strncpy(queue.queueInterface, "erouter0", sizeof(queue.queueInterface));               // Associated interface
-    queue.queueWeight = 50;                                                                // Queue weight (0 to 100)
-    queue.queuePrecedence = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.queuePrecedence"); // Precedence (vendor-specific)
-    queue.REDThreshold = 80;
-    /*                                                             // RED threshold
-    const char *dropAlgo = UT_KVP_PROFILE_GET_STRING("wan.config.queue.dropAlgorithm");    // Drop algorithm (vendor-specific)
-    strncpy(queue.dropAlgorithm, dropAlgo, sizeof(queue.dropAlgorithm));
-    const char *schedAlgo = UT_KVP_PROFILE_GET_STRING("wan.config.queue.schedulerAlgorithm"); // Scheduling algorithm (vendor-specific)
-    strncpy(queue.schedulerAlgorithm, schedAlgo, sizeof(queue.schedulerAlgorithm));
-    */
-    char retrievedString[MAX_STRING_LENGTH]; // Declare a string variable to store the retrieved value
-    // Retrieve the drop algorithm from the YAML file
-    UT_KVP_PROFILE_GET_STRING("wan.config.queue.dropAlgorithm", retrievedString);
-    // Copy the retrieved string to the queue structure
-    strncpy(queue.dropAlgorithm, retrievedString, sizeof(queue.dropAlgorithm));
-    // Retrieve the scheduling algorithm from the YAML file
-    UT_KVP_PROFILE_GET_STRING("wan.config.queue.schedulerAlgorithm", retrievedString);
-    // Copy the retrieved string to the queue structure
-    strncpy(queue.schedulerAlgorithm, retrievedString, sizeof(queue.schedulerAlgorithm));
-
-    queue.shapingRate = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.shapingRate");           // Shaping rate (vendor-specific)
-    queue.shapingBurstSize = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.shapingBurstSize"); // Shaping burst size (vendor-specific)
-    queue.MinBitRate = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.MinBitRate");             // Minimum bit rate (vendor-specific)
-    strncpy(queue.QueueName, "WAN Q1", sizeof(queue.QueueName));                             // Queue name
-    queue.DslLatency = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.DslLatency");             // DSL latency (vendor-specific)
-    queue.PtmPriority = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.PtmPriority");           // PTM priority (vendor-specific)
-    queue.QueueId = UT_KVP_PROFILE_GET_UINT32("wan.config.queue.QueueId");                   // Queue ID (vendor-specific)
-    queue.LowClassMaxThreshold = 90;                                                         // Low class max threshold
-    queue.LowClassMinThreshold = 10;                                                         // Low class min threshold
-    queue.HighClassMinThreshold = 20;                                                        // High class min threshold
-    queue.HighClassMaxThreshold = 95;                                                        // High class max threshold
-    strncpy(queue.L2DeviceType, "eth", sizeof(queue.L2DeviceType));                          // Layer 2 device type
 
     // Add tests to the suite
 
@@ -2584,7 +2590,6 @@ int test_wan_hal_l1_register(void)
     UT_add_test(pSuite, "l1_wan_hal_negative6_EnableMapt", test_l1_wan_hal_negative6_EnableMapt);
     UT_add_test(pSuite, "l1_wan_hal_negative7_EnableMapt", test_l1_wan_hal_negative7_EnableMapt);
     UT_add_test(pSuite, "l1_wan_hal_negative8_EnableMapt", test_l1_wan_hal_negative8_EnableMapt);
-    // UT_add_test(pSuite, "l1_wan_hal_positive1_EnableMapt", test_l1_wan_hal_positive1_EnableMapt);
     UT_add_test(pSuite, "l1_wan_hal_positive1_DisableMapt", test_l1_wan_hal_positive1_DisableMapt);
     UT_add_test(pSuite, "l1_wan_hal_negative1_DisableMapt", test_l1_wan_hal_negative1_DisableMapt);
     UT_add_test(pSuite, "l1_wan_hal_negative2_DisableMapt", test_l1_wan_hal_negative2_DisableMapt);
