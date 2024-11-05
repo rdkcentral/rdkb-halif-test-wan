@@ -31,5 +31,5 @@ wan:
     invalid_wanmode:
       - 0
       - 5
-      - -1
+      - 10
       - 100

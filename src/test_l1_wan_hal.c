@@ -267,12 +267,12 @@ void test_l1_wan_hal_negative1_SetWanmode(void)
     num_invalid_mode = UT_KVP_PROFILE_GET_LIST_COUNT("wan/config/invalid_wanmode");
     int invalid_mode[num_invalid_mode];
     char mode[50];
-    for (i = 0; i <= num_invalid_mode; i++)
+    for (i = 0; i < num_invalid_mode; i++)
     {
-        sprintf(mode, "vlan/config/invalid_brName/%d", i); // Fetch from yaml file
+        sprintf(mode, "wan/config/invalid_wanmode/%d", i); // Fetch from yaml file
         invalid_mode[i] = UT_KVP_PROFILE_GET_UINT32(mode);
         int ret = wan_hal_SetWanmode(invalid_mode[i]);
-        UT_LOG_DEBUG("Invoking wan_hal_SetWanmode with mode as %d\n", invalid_mode);
+        UT_LOG_DEBUG("Invoking wan_hal_SetWanmode with mode as %d\n", invalid_mode[i]);
         UT_ASSERT_EQUAL(ret, RETURN_ERROR);
     }
 
